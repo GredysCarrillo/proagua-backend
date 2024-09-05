@@ -6,8 +6,6 @@ export class CreateUserDto {
     name: string;
 
     @IsNumber()
-    @MinLength(13)
-    @MaxLength(13)
     dpi: number;
 
     @IsEmail()
