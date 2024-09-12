@@ -3,6 +3,8 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 @Schema()
 export class User {
 
+    _id?: string;
+
     @Prop({required: true})
     name:string;
 
@@ -17,6 +19,9 @@ export class User {
 
     @Prop({required:true})
     password?:string;
+
+    @Prop()
+    isActive:boolean;
 
     @Prop({ type: [String], default: ['user'] })
     roles: string[];

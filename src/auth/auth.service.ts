@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -6,6 +6,9 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcryptjs from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
+import { jwtPayload } from './interfaces/jwt-payload';
+import { loginDto } from './dto/login.dto';
+import { loginResponse } from './interfaces/login.response';
 
 
 @Injectable()
@@ -40,10 +43,37 @@ export class AuthService {
     }
   }
 
-  async createService(){
-    
-  }
+    //metodo para loguearse
+    async login(LoginDto: loginDto): Promise<loginResponse> {
 
+      const { dpi, password } = LoginDto;
+      const user = await this.userModel.findOne({ dpi });
+      if (!user) {
+        throw new UnauthorizedException('Not valid credentials - DPI no encontrado')
+      }
+      if (!bcryptjs.compareSync(password, user.password)) {
+        throw new UnauthorizedException('Not valid credentiasl -password invalid')
+      }
+  
+      const { password:_, ...rest } = user.toJSON();
+  
+      return {
+        user: rest,
+        token: this.getJwtToken({ id: user.id }),
+      }
+    }
+
+    getJwtToken(payload: jwtPayload) {
+      const token = this.jwtServive.sign (payload);
+      return token;
+    }
+
+    async findUserById(id: string){
+      const user = await this.userModel.findById(id);
+      const {password, ...rest} = user.toJSON();
+      return rest;
+    }
+    
 
   findAll() {
     return `This action returns all auth`;

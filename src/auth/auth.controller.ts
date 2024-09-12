@@ -1,11 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { loginDto } from './dto/login.dto';
+import { AuthGuard } from './guards/auth.guard';
+import { loginResponse } from './interfaces/login.response';
+import { User } from './entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
 
   @Post('/create')
@@ -13,20 +17,24 @@ export class AuthController {
     return this.authService.createUser(createAuthDto);
   }
 
+  @Post('/login')
+  login(@Body() loginDto: loginDto) {
+    return this.authService.login(loginDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/check-token')
+  checkToken(@Request() req: Request): loginResponse {
+
+    const user = req['user'] as User;
+    return {
+      user,
+      token: this.authService.getJwtToken({ id: user._id })
+    }
+
+  }
   
-
-
-
-
-
-
-
-
-
-
-
-
-  
+  @UseGuards(AuthGuard)
   @Get()
   findAll() {
     return this.authService.findAll();
