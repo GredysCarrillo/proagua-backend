@@ -1,4 +1,3 @@
-import { NestFactory } from "@nestjs/core";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Date } from "mongoose";
 
@@ -15,10 +14,7 @@ export class proaguaService{
     typeOfStableshment:string;
 
     @Prop({required:true})
-    counterNumber:string;
-
-    @Prop({required:true})
-    startDate:Date
+    startDate:Date;
 }
 
 export const serviceSchema = SchemaFactory.createForClass(proaguaService); 

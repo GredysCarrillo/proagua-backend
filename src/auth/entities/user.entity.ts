@@ -1,5 +1,4 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Date } from "mongoose";
 
 @Schema()
 export class User {
@@ -8,19 +7,19 @@ export class User {
     name:string;
 
     @Prop({required: true, unique: true})
-    dpi:number;
+    dpi:string;
 
     @Prop({required: true})  
     email: string;
     
     @Prop({required: true})
-    phoneNumber: number;
+    phoneNumber: string;
 
     @Prop({required:true})
     password?:string;
 
-    @Prop({type: [String], default: 'user'})
-    rol: string[];
+    @Prop({ type: [String], default: ['user'] })
+    roles: string[];
 
 }   
 

@@ -5,19 +5,16 @@ export class CreateUserDto {
     @IsString()
     name: string;
 
-    @IsNumber()
-    dpi: number;
+    @IsString()
+    dpi: string;
 
     @IsEmail()
     email: string;
 
-    @IsNumber()
-    phoneNumber: number;
+    @IsString()
+    phoneNumber: string;
 
     @MinLength(8)
     password: string;
-
-    @IsString()
-    rol: string[];
 
 }

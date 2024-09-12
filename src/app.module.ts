@@ -5,12 +5,17 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [AuthModule,
-    ConfigModule.forRoot(),
-      MongooseModule.forRoot(process.env.MONGO_URI,{
-        dbName: process.env.MONGO_DB_NAME,
-      }),
+
+    MongooseModule.forRoot(process.env.MONGO_URI, {
+      dbName: process.env.MONGO_DB_NAME,
+      connectionFactory: (connection) => {
+        console.log('MongoDB connected:', connection.readyState);
+        return connection;
+      },
+    }),
+
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
