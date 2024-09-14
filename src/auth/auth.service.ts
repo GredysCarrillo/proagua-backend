@@ -56,7 +56,7 @@ export class AuthService {
       return user;
     } catch (error) {
       if (error.code === 11000) {
-        throw new BadRequestException(`Ya existe un usuario con este DPI :  ${createUserDto.dpi}`);
+        throw new BadRequestException(`Ya existe un usuario con este DPI:  ${createUserDto.dpi}`);
       }
       throw new InternalServerErrorException('Algo salio mal al intentar registrar el usuario', error);
     }

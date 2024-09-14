@@ -15,7 +15,7 @@ export class proaguaService{
     
     @Prop({required:true})
     serviceType:string;
-
+    
     }
 
 export const serviceSchema = SchemaFactory.createForClass(proaguaService); 
