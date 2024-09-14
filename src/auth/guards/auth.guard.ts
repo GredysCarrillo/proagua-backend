@@ -31,6 +31,7 @@ export class AuthGuard implements CanActivate {
       request['user'] = user;
     }
     catch (error) {
+      console.error('error al verificar el token', error.message);
       throw new UnauthorizedException('El token tiene algun problema');
     } 
     return true;
