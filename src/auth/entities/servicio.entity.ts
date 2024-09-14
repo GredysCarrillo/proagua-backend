@@ -1,20 +1,21 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Date } from "mongoose";
+
 
 @Schema()
 export class proaguaService{
 
     @Prop({required:true})
-    userId:string;
+    _Id:string;
 
     @Prop({required:true})
-    serviceAdress:string;
+    Address:string;
 
     @Prop({required:true})
-    typeOfStableshment:string;
-
+    Colonia:string;
+    
     @Prop({required:true})
-    startDate:Date;
-}
+    serviceType:string;
+
+    }
 
 export const serviceSchema = SchemaFactory.createForClass(proaguaService); 

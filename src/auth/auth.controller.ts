@@ -1,3 +1,4 @@
+import { createServiceDto } from './dto/create-service.dto';
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -12,9 +13,14 @@ export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
 
-  @Post('/create')
-  create(@Body() createAuthDto: CreateUserDto) {
+  @Post('/createUser')
+  createUser(@Body() createAuthDto: CreateUserDto) {
     return this.authService.createUser(createAuthDto);
+  }
+  
+  @Post('/createService')
+  createService(@Body() createService: createServiceDto){
+    return this.authService.createService(createService);
   }
 
   @Post('/login')
@@ -25,13 +31,11 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Get('/check-token')
   checkToken(@Request() req: Request): loginResponse {
-
     const user = req['user'] as User;
     return {
       user,
       token: this.authService.getJwtToken({ id: user._id })
     }
-
   }
   
   @UseGuards(AuthGuard)
@@ -41,8 +45,8 @@ export class AuthController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
+  finByUserById(@Param('id') id: string) {
+    return this.authService.findUserById(id);
   }
 
   @Patch(':id')

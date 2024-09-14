@@ -3,16 +3,16 @@ import { IsString } from 'class-validator';
 export class createServiceDto{
 
 @IsString()
-userId:string;
+_Id:string;
 
 @IsString()
-serviceAdress:string;
+Address:string;
 
 @IsString()
-typeOfStableshment:string;
+Colonia:string;
 
 @IsString()
-startDate:Date
+serviceType:string;
 
 }
 
