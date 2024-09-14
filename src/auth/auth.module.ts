@@ -5,7 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
-import { proaguaService, serviceSchema } from './entities/servicio.entity';
+import { proaguaService, serviceSchema } from '../data-ser/entities/servicio.entity';
 
 @Module({
   controllers: [AuthController],
@@ -15,8 +15,7 @@ import { proaguaService, serviceSchema } from './entities/servicio.entity';
     ConfigModule.forRoot(),
 
     MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema },
-      { name: proaguaService.name, schema: serviceSchema }
+      { name: User.name, schema: UserSchema }
     ]),
 
     JwtModule.register({

@@ -1,5 +1,3 @@
-import { proaguaService } from './entities/servicio.entity';
-import { createServiceDto } from './dto/create-service.dto';
 import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -12,7 +10,6 @@ import { jwtPayload } from './interfaces/jwt-payload';
 import { loginDto } from './dto/login.dto';
 import { loginResponse } from './interfaces/login.response';
 import * as nodemailer from 'nodemailer';
-import { throwError } from 'rxjs';
 
 
 @Injectable()
@@ -21,7 +18,6 @@ export class AuthService {
   //Constructor
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
-    @InjectModel( proaguaService.name) private serviceModel: Model<proaguaService>,
     private jwtServive: JwtService,
   ) { }
 
@@ -62,18 +58,6 @@ export class AuthService {
     }
   }
 
-
-  //Metodo para crear un servicio
-  async createService(createService: createServiceDto): Promise<proaguaService> {
-    try {
-      const newService = new this.serviceModel(createService);
-      await newService.save();
-      return newService;
-    } catch (error) {
-      throw new InternalServerErrorException('Error al crear el servicio', error)
-    }
-  }
-
   //metodo para loguearse
   async login(LoginDto: loginDto): Promise<loginResponse> {
     const { dpi, password } = LoginDto;
@@ -111,9 +95,8 @@ export class AuthService {
     return rest;
   }
 
-  //Metodo para buscar todo
-  findAll() {
-    return `This action returns all auth`;
+ async findAll():Promise<User[]> {
+    return this.userModel.find().exec();
   }
 
   //Metodo para actualizar

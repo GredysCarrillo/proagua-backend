@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { DataSerModule } from './data-ser/data-ser.module';
 
 @Module({
   imports: [AuthModule,
@@ -14,6 +15,7 @@ import { MongooseModule } from '@nestjs/mongoose';
         return connection;
       },
     }),
+    DataSerModule,
 
   ],
   controllers: [],

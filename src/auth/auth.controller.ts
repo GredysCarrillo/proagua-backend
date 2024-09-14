@@ -1,4 +1,3 @@
-import { createServiceDto } from './dto/create-service.dto';
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -18,10 +17,6 @@ export class AuthController {
     return this.authService.createUser(createAuthDto);
   }
   
-  @Post('/createService')
-  createService(@Body() createService: createServiceDto){
-    return this.authService.createService(createService);
-  }
 
   @Post('/login')
   login(@Body() loginDto: loginDto) {
@@ -38,9 +33,8 @@ export class AuthController {
     }
   }
   
-  @UseGuards(AuthGuard)
-  @Get()
-  findAll() {
+  @Get('/users')
+  findAll():Promise<User[]> {
     return this.authService.findAll();
   }
 
