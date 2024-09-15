@@ -1,3 +1,4 @@
+import { Type } from "class-transformer";
 import { IsDate, IsString } from "class-validator";
 import { Types } from "mongoose";
 
@@ -18,6 +19,7 @@ export class CreateDataTicketDto {
     @IsString()
     status: string;
 
+    @Type(() => Date)
     @IsDate()
     CreatedAt: Date;
 
