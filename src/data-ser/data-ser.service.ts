@@ -10,9 +10,7 @@ export class DataSerService {
 
   constructor(
     @InjectModel( proaguaService.name) private serviceModel: Model<proaguaService>,
-  ){
-
-  }
+  ){}
 
    //Metodo para crear un servicio
    async createService(createService: createServiceDto): Promise<proaguaService> {
