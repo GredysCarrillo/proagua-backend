@@ -12,15 +12,35 @@ export class DataTicketsController {
     return this.dataTicketsService.createTicket(createDataTicketDto);
   }
 
-  @Get()
-  findAll() {
-    return this.dataTicketsService.findAll();
-  }
-
   @Get('user/:userId')
   findById(@Param('userId') userId: string): Promise<CreateDataTicketDto[]> {
     return this.dataTicketsService.findById(userId);
   }
+
+  @Get('/count-by-status')
+  async countTicketsByStatus(){
+    return this.dataTicketsService.countTicketByStatus();
+  }
+
+  @Get('/all-tickets')
+  findAll() {
+    return this.dataTicketsService.findAll();
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDataTicketDto: UpdateDataTicketDto) {
