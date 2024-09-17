@@ -22,30 +22,27 @@ export class DataTicketsController {
     return this.dataTicketsService.countTicketByStatus();
   }
 
+  @Get('/count-active-ticket')
+  async countTicketsActive(){
+    return this.dataTicketsService.countTicketsActive();
+  }
+
   @Get('/all-tickets')
   findAll() {
     return this.dataTicketsService.findAll();
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDataTicketDto: UpdateDataTicketDto) {
-    return this.dataTicketsService.update(+id, updateDataTicketDto);
+  @Patch('/update-status/:id')
+  update(@Param('id') ticketId: string, @Body() updateDataTicketDto: UpdateDataTicketDto) {
+    return this.dataTicketsService.updateTicketStatus(ticketId, updateDataTicketDto.status);
   }
+
+
+
+
+
+
+
 
   @Delete(':id')
   remove(@Param('id') id: string) {
