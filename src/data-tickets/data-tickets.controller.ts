@@ -17,9 +17,9 @@ export class DataTicketsController {
     return this.dataTicketsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.dataTicketsService.findOne(+id);
+  @Get('user/:userId')
+  findById(@Param('userId') userId: string): Promise<CreateDataTicketDto[]> {
+    return this.dataTicketsService.findById(userId);
   }
 
   @Patch(':id')

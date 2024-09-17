@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateDataTicketDto } from './dto/create-data-ticket.dto';
 import { UpdateDataTicketDto } from './dto/update-data-ticket.dto';
 import { dataTicket } from './entities/data-ticket.entity';
@@ -23,13 +23,33 @@ export class DataTicketsService {
     }
   }
 
+ async findById(userId:string): Promise<CreateDataTicketDto[]> {
+    const tickets = await this.ticketModel.find({userId}).exec();
+    
+    if(!tickets || tickets.length === 0){
+      throw new NotFoundException('Ningun ticket creado')
+    } 
+    return tickets;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
   findAll() {
     return `This action returns all dataTickets`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} dataTicket`;
-  }
 
   update(id: number, updateDataTicketDto: UpdateDataTicketDto) {
     return `This action updates a #${id} dataTicket`;

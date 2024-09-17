@@ -1,6 +1,5 @@
 import { Type } from "class-transformer";
 import { IsDate, IsString } from "class-validator";
-import { Types } from "mongoose";
 
 export class CreateDataTicketDto {
 
@@ -11,10 +10,7 @@ export class CreateDataTicketDto {
     description: string;
 
     @IsString()
-    userId: Types.ObjectId;
-
-    @IsString()
-    serviceId: Types.ObjectId;
+    userId: string;
 
     @IsString()
     status: string;

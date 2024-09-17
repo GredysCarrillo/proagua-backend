@@ -14,12 +14,9 @@ export class dataTicket {
     @Prop()
     photo: string;
 
-    @Prop({ type: Types.ObjectId, ref: 'User', required: true })
-    userId: Types.ObjectId; 
+    @Prop({required: true })
+    userId: string; 
   
-    @Prop({ type: Types.ObjectId, ref: 'Service', required: true })
-    serviceId: Types.ObjectId;
-
     @Prop({required:true})
     status:string;
 
