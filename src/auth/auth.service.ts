@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -95,6 +95,17 @@ export class AuthService {
     return rest;
   }
 
+  //Actualizar el usuario
+  async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<User> {
+    const user = await this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true });
+    if (!user) {
+      throw new NotFoundException(`Usuario con ID ${id} no encontrado`);
+    }
+    const { password, ...rest } = user.toJSON();
+    return rest; // Retorna el usuario sin la contraseña
+  }
+
+  //Buscar todos los usuarios
  async findAll():Promise<User[]> {
     return this.userModel.find().exec();
   }
