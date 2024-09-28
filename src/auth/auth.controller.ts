@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, Req, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, Req, Put, InternalServerErrorException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -16,7 +16,7 @@ export class AuthController {
   createUser(@Body() createAuthDto: CreateUserDto) {
     return this.authService.createUser(createAuthDto);
   }
-  
+
 
   @Post('/login')
   login(@Body() loginDto: loginDto) {
@@ -32,9 +32,9 @@ export class AuthController {
       token: this.authService.getJwtToken({ id: user._id })
     }
   }
-  
+
   @Get('/users')
-  findAll():Promise<User[]> {
+  findAll(): Promise<User[]> {
     return this.authService.findAll();
   }
 
@@ -43,24 +43,15 @@ export class AuthController {
     return this.authService.findUserById(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateUserDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
-  }
-
   // Método para obtener el usuario logueado
   @Get('/me/:id')
   async getCurrentUser(@Param('id') id: string) {
     return this.authService.findUserById(id);
   }
-  // Método para actualizar un usuario
-  @Put(':id')
-  async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.authService.updateUser(id, updateUserDto);
-  }
+
+
+  //not implemented methods
+
+
+
 }

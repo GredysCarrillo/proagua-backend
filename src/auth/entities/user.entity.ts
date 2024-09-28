@@ -20,6 +20,9 @@ export class User {
     @Prop({required:true})
     password?:string;
 
+    @Prop({ type: Buffer}) 
+    photo?: Buffer; 
+
     @Prop({default:true})
     isActive:boolean;
 

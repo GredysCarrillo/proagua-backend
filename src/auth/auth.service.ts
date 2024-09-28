@@ -110,11 +110,26 @@ export class AuthService {
     return this.userModel.find().exec();
   }
 
-  //Metodo para actualizar
-  update(id: number, updateAuthDto: UpdateUserDto) {
-    return `This action updates a #${id} auth`;
+  async ChargeImage(userId: string, photo: string) {
+    try {
+      // Actualiza el usuario usando await
+      const updatedUser = await this.userModel.findByIdAndUpdate(
+        userId,
+        { photo }, // Aquí se actualiza el campo photo
+        { new: true } // Opción para retornar el usuario actualizado
+      );
+  
+      if (!updatedUser) {
+        throw new Error('Usuario no encontrado');
+      }
+  
+      return updatedUser;
+    } catch (error) {
+      console.error('Error actualizando la imagen del usuario:', error);
+      throw new Error('No se pudo actualizar la imagen');
+    }
   }
-
+  
   //Metodo para eliminar
   remove(id: number) {
     return `This action removes a #${id} auth`;
