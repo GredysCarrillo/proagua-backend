@@ -84,7 +84,7 @@ export class AuthService {
   // Método para generar la contraseña
   private generatePassword(dpi: string, name: string): string {
     const firstFourDigitsOfDpi = dpi.slice(0, 5);
-    const firstFourLettersOfName = name.slice(0, 5).toLowerCase(); 
+    const firstFourLettersOfName = name.slice(0, 5).toLowerCase();
     return `${firstFourDigitsOfDpi}${firstFourLettersOfName}`;
   }
 
@@ -106,7 +106,7 @@ export class AuthService {
   }
 
   //Buscar todos los usuarios
- async findAll():Promise<User[]> {
+  async findAll(): Promise<User[]> {
     return this.userModel.find().exec();
   }
 
@@ -118,22 +118,52 @@ export class AuthService {
         { photo }, // Aquí se actualiza el campo photo
         { new: true } // Opción para retornar el usuario actualizado
       );
-  
+
       if (!updatedUser) {
         throw new Error('Usuario no encontrado');
       }
-  
+
       return updatedUser;
     } catch (error) {
       console.error('Error actualizando la imagen del usuario:', error);
       throw new Error('No se pudo actualizar la imagen');
     }
   }
-  
+
   //Metodo para eliminar
   remove(id: number) {
     return `This action removes a #${id} auth`;
   }
+
+
+  ///mover hacia otro recurso de mongo
+
+  async updateUserPhoto(userId: string, file: Express.Multer.File): Promise<any> {
+    const user = await this.userModel.findById(userId);
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    user.photo = file.buffer;
+    await user.save();
+    return { message: 'Fotografía cargada correctamente', photo: user.photo };
+  }
+
+ // Método para obtener la fotografía del usuario por su ID
+ async getFotoByUserId(userId: string): Promise<Buffer> {
+  const user = await this.userModel.findById(userId);
+
+  if (!user || !user.photo) {
+    throw new NotFoundException('Fotografía no encontrada');
+  }
+
+  // Verificamos si `photo` es un Buffer, de lo contrario, lo convertimos
+  if (!(user.photo instanceof Buffer)) {
+    // Si es un `ArrayBuffer`, lo convertimos a `Buffer`
+    return Buffer.from(user.photo);
+  }
+
+  return user.photo;  // Si ya es un Buffer, simplemente lo retornamos
+}
 
 
 }

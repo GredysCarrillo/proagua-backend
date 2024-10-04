@@ -1,11 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, Req, Put, InternalServerErrorException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, Request, Put, UseInterceptors, UploadedFile, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { loginDto } from './dto/login.dto';
 import { AuthGuard } from './guards/auth.guard';
 import { loginResponse } from './interfaces/login.response';
 import { User } from './entities/user.entity';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -50,7 +51,29 @@ export class AuthController {
   }
 
 
+  //metodo para cargar una imagen
+
+  @Put('/uploadPhoto/:id')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadPhoto(@Param('id') userId: string, @UploadedFile() file: Express.Multer.File,) {
+    console.log(userId, file)
+    return this.authService.updateUserPhoto(userId, file);
+  }
+
   //not implemented methods
+
+   // Ruta para obtener la foto del usuario por ID
+   @Get('/photo/:userId')
+   async getUserPhoto(@Param('userId') userId: string, @Res() res: Response) {
+     const photoBuffer = await this.authService.getFotoByUserId(userId);
+ 
+     // Establecer el tipo de contenido como imagen (asumimos JPEG, ajusta si es PNG u otro formato)
+     res.setHeader('Content-Type', 'image/jpeg'); 
+ 
+     // Enviar la imagen como respuesta binaria
+     return res.send(photoBuffer);
+   }
+
 
 
 

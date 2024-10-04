@@ -5,7 +5,6 @@ import { IsOptional, IsString } from 'class-validator';
 export class UpdateUserDto extends PartialType(CreateUserDto) {
 
     
-    @IsString()
-    photoUrl: string;
+    photoUrl: Buffer;
 
 }
