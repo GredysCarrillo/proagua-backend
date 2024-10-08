@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, UseGuards, Request, Put, UseInterceptors, UploadedFile, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, Request, Put, UseInterceptors, UploadedFile, Res, Patch } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { loginDto } from './dto/login.dto';
@@ -7,6 +7,7 @@ import { loginResponse } from './interfaces/login.response';
 import { User } from './entities/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
+import { ChangePasswordDto } from './dto/chage-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -74,6 +75,11 @@ export class AuthController {
      return res.send(photoBuffer);
    }
 
+   @Patch('change-password/:id')
+    async changePassword(@Param('id') userId: string, @Body() changePasswordDto: ChangePasswordDto): Promise<void> {
+      console.log(userId, changePasswordDto.newPassword, changePasswordDto.confirmPassword, changePasswordDto.currentPassword);
+        return this.authService.changePassword(userId, changePasswordDto);
+    }
 
 
 

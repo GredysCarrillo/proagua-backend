@@ -10,6 +10,7 @@ import { jwtPayload } from './interfaces/jwt-payload';
 import { loginDto } from './dto/login.dto';
 import { loginResponse } from './interfaces/login.response';
 import * as nodemailer from 'nodemailer';
+import { ChangePasswordDto } from './dto/chage-password.dto';
 
 
 @Injectable()
@@ -66,6 +67,7 @@ export class AuthService {
       throw new UnauthorizedException('Not valid credentials - DPI no encontrado')
     }
     if (!bcryptjs.compareSync(password, user.password)) {
+      console.log(LoginDto.password, LoginDto.dpi);
       throw new UnauthorizedException('Not valid credentiasl -password invalid')
     }
     const { password: _, ...rest } = user.toJSON();
@@ -148,22 +150,51 @@ export class AuthService {
     return { message: 'Fotografía cargada correctamente', photo: user.photo };
   }
 
- // Método para obtener la fotografía del usuario por su ID
- async getFotoByUserId(userId: string): Promise<Buffer> {
-  const user = await this.userModel.findById(userId);
+  // Método para obtener la fotografía del usuario por su ID
+  async getFotoByUserId(userId: string): Promise<Buffer> {
+    const user = await this.userModel.findById(userId);
 
-  if (!user || !user.photo) {
-    throw new NotFoundException('Fotografía no encontrada');
+    if (!user || !user.photo) {
+      throw new NotFoundException('Fotografía no encontrada');
+    }
+
+    // Verificamos si `photo` es un Buffer, de lo contrario, lo convertimos
+    if (!(user.photo instanceof Buffer)) {
+      // Si es un `ArrayBuffer`, lo convertimos a `Buffer`
+      return Buffer.from(user.photo);
+    }
+
+    return user.photo;  // Si ya es un Buffer, simplemente lo retornamos
   }
 
-  // Verificamos si `photo` es un Buffer, de lo contrario, lo convertimos
-  if (!(user.photo instanceof Buffer)) {
-    // Si es un `ArrayBuffer`, lo convertimos a `Buffer`
-    return Buffer.from(user.photo);
-  }
 
-  return user.photo;  // Si ya es un Buffer, simplemente lo retornamos
-}
+  async changePassword(userId: string, changePasswordDto: ChangePasswordDto): Promise<void> {
+    try {
+      const user = await this.userModel.findById(userId);
+      if (!user) {
+        throw new NotFoundException('Usuario no encontrado');
+      }
+
+      const isMatch = await bcryptjs.compare(changePasswordDto.currentPassword, user.password);
+      if (!isMatch) {
+        throw new BadRequestException('La contraseña actual es incorrecta');
+      }
+
+      if (changePasswordDto.newPassword !== changePasswordDto.confirmPassword) {
+        throw new BadRequestException('Las contraseñas no coinciden');
+      }
+
+      const hashedNewPassword = await bcryptjs.hash(changePasswordDto.newPassword, 10);
+      user.password = hashedNewPassword;
+      console.log(user.password);
+      console.log(hashedNewPassword);
+      await user.save();
+
+    } catch (error) {
+      console.error(error); // Loguea el error para verificar en el servidor
+      throw error; // Lanza una excepción más genérica
+    }
+  }
 
 
 }
