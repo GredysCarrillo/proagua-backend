@@ -14,18 +14,21 @@ export class DataTicketsService {
 
   async createTicket(createDataTicketDto: CreateDataTicketDto): Promise<dataTicket> {
     try {
+      // Aquí se procesaría el archivo si existe
+      if (createDataTicketDto.image) {
+        createDataTicketDto.image= Buffer.from(createDataTicketDto.image); // Convertir a Buffer
+      }
       const newTicket = new this.ticketModel(createDataTicketDto);
       await newTicket.save();
       console.log({ newTicket });
       return newTicket;
     } catch (error) {
-      throw new InternalServerErrorException('No se creo el ticket', error);
+      throw new InternalServerErrorException('No se creó el ticket', error);
     }
   }
 
   async findById(userId: string): Promise<CreateDataTicketDto[]> {
     const tickets = await this.ticketModel.find({ userId }).exec();
-
     if (!tickets || tickets.length === 0) {
       throw new NotFoundException('Ningun ticket creado')
     }

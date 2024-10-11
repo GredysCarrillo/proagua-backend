@@ -23,6 +23,9 @@ export class dataTicket {
     @Prop({default: Date.now})
     CreatedAt:Date;
 
+    @Prop({ type: Buffer })
+    image?: Buffer;
+
 }
 
 export const ticketsSchema = SchemaFactory.createForClass(dataTicket)

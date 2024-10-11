@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsDate, IsString } from "class-validator";
+import { IsDate, IsOptional, IsString } from "class-validator";
 
 export class CreateDataTicketDto {
 
@@ -19,4 +19,7 @@ export class CreateDataTicketDto {
     @IsDate()
     CreatedAt: Date;
 
+    @IsOptional()
+    image?: Buffer;
+    
 }

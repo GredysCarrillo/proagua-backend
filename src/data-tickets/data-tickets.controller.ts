@@ -1,14 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { DataTicketsService } from './data-tickets.service';
 import { CreateDataTicketDto } from './dto/create-data-ticket.dto';
 import { UpdateDataTicketDto } from './dto/update-data-ticket.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('data-tickets')
 export class DataTicketsController {
   constructor(private readonly dataTicketsService: DataTicketsService) {}
 
   @Post('/create-ticket')
-  create(@Body() createDataTicketDto: CreateDataTicketDto) {
+  @UseInterceptors(FileInterceptor('photo')) // 'photo' es el nombre del campo del archivo en el formulario
+  async create(
+    @UploadedFile() file: Express.Multer.File, // Aquí recibimos el archivo
+    @Body() createDataTicketDto: CreateDataTicketDto,
+  ) {
+    if (file) {
+      // Si hay un archivo, lo convertimos a Buffer
+      createDataTicketDto.image = file.buffer; // Guardamos el buffer de la imagen en el DTO
+    }
     return this.dataTicketsService.createTicket(createDataTicketDto);
   }
 
