@@ -23,6 +23,23 @@ export class DataSerService {
     }
   }
 
+  async findByUserId(_Id:string): Promise<createServiceDto[]>{
+    try{
+      const services = await this.serviceModel.find({ _Id }).exec();
+      if (!services || services.length === 0) {
+        throw new InternalServerErrorException('No se encontraron servicios para este usuario');
+      }
+      return services;
+    }catch(error){
+      throw new InternalServerErrorException('Error al obtener el servicio', error)
+    }
+  }
+
+
+
+  
+
+
   findAll() {
     return 'this actions return all services'
   }

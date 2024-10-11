@@ -25,6 +25,7 @@ export class DataTicketsController {
   findById(@Param('userId') userId: string): Promise<CreateDataTicketDto[]> {
     return this.dataTicketsService.findById(userId);
   }
+  
 
   @Get('/count-by-status')
   async countTicketsByStatus(){
