@@ -69,8 +69,6 @@ export class DataTicketsService {
     return updateTicket;
   }
 
-
-
   remove(id: number) {
     return `This action removes a #${id} dataTicket`;
   }

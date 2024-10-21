@@ -85,10 +85,11 @@ export class AuthService {
 
   // Método para generar la contraseña
   private generatePassword(dpi: string, name: string): string {
-    const firstFourDigitsOfDpi = dpi.slice(0, 5);
-    const firstFourLettersOfName = name.slice(0, 5).toLowerCase();
+    const firstFourDigitsOfDpi = dpi.slice(0, 4); // Corregido a 4 dígitos
+    const firstFourLettersOfName = name.slice(0, 4).toLowerCase(); // Corregido a 4 letras
     return `${firstFourDigitsOfDpi}${firstFourLettersOfName}`;
   }
+  
 
   //Metodo para buscar por Id
   async findUserById(id: string) {
