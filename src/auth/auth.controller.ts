@@ -60,9 +60,6 @@ export class AuthController {
     console.log(userId, file)
     return this.authService.updateUserPhoto(userId, file);
   }
-
-  //not implemented methods
-
    // Ruta para obtener la foto del usuario por ID
    @Get('/photo/:userId')
    async getUserPhoto(@Param('userId') userId: string, @Res() res: Response) {
