@@ -11,6 +11,8 @@ import { loginDto } from './dto/login.dto';
 import { loginResponse } from './interfaces/login.response';
 import * as nodemailer from 'nodemailer';
 import { ChangePasswordDto } from './dto/chage-password.dto';
+import { dataTicket } from 'src/data-tickets/entities/data-ticket.entity';
+
 
 
 @Injectable()
@@ -19,6 +21,7 @@ export class AuthService {
   //Constructor
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(dataTicket.name) private ticketModel: Model<dataTicket>,
     private jwtServive: JwtService,
   ) { }
 
@@ -134,8 +137,13 @@ export class AuthService {
   }
 
   //Metodo para eliminar
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  async deleteUser(userId: string): Promise<void> {
+
+    await this.ticketModel.deleteMany({userId}).exec();
+    const result = await this.userModel.findByIdAndDelete(userId).exec();
+    if (!result) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
   }
 
 
@@ -164,7 +172,6 @@ export class AuthService {
       // Si es un `ArrayBuffer`, lo convertimos a `Buffer`
       return Buffer.from(user.photo);
     }
-
     return user.photo;  // Si ya es un Buffer, simplemente lo retornamos
   }
 
@@ -197,5 +204,19 @@ export class AuthService {
     }
   }
 
+  // Método para actualizar el estado de un usuario
+  async updateUserStatus(userId: string, status: boolean): Promise<User> {
+    // Busca el usuario por su ID y actualiza su estado
+    const updatedUser = await this.userModel.findByIdAndUpdate(
+      userId,
+      { status },
+      { new: true } // Esta opción devuelve el usuario actualizado
+    );
+    // Verifica si el usuario existe
+    if (!updatedUser) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+    return updatedUser;
+  }
 
 }

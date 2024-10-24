@@ -5,13 +5,14 @@ import { dataTicket, ticketsSchema } from './entities/data-ticket.entity';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
+
 @Module({
   controllers: [DataTicketsController],
   providers: [DataTicketsService],
   imports:[   
 
     ConfigModule.forRoot(),
-    MongooseModule.forFeature([
+   MongooseModule.forFeature([
       { name: dataTicket.name, schema: ticketsSchema}
     ]),
   ]

@@ -5,17 +5,22 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
-import { proaguaService, serviceSchema } from '../data-ser/entities/servicio.entity';
+import { DataTicketsModule } from 'src/data-tickets/data-tickets.module';
+import { dataTicket, ticketsSchema } from 'src/data-tickets/entities/data-ticket.entity';
 
 @Module({
   controllers: [AuthController],
   providers: [AuthService],
   imports:[
-
+    DataTicketsModule,
     ConfigModule.forRoot(),
-
+    
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema }
+    ]),
+
+    MongooseModule.forFeature([
+      { name: dataTicket.name, schema: ticketsSchema}
     ]),
 
     JwtModule.register({
