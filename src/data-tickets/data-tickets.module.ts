@@ -4,6 +4,7 @@ import { DataTicketsController } from './data-tickets.controller';
 import { dataTicket, ticketsSchema } from './entities/data-ticket.entity';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { User, UserSchema } from 'src/auth/entities/user.entity';
 
 
 @Module({
@@ -14,6 +15,9 @@ import { MongooseModule } from '@nestjs/mongoose';
     ConfigModule.forRoot(),
    MongooseModule.forFeature([
       { name: dataTicket.name, schema: ticketsSchema}
+    ]),
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema }
     ]),
   ]
 })

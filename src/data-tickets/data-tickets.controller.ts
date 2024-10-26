@@ -6,17 +6,16 @@ import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('data-tickets')
 export class DataTicketsController {
-  constructor(private readonly dataTicketsService: DataTicketsService) {}
+  constructor(private readonly dataTicketsService: DataTicketsService) { }
 
   @Post('/create-ticket')
-  @UseInterceptors(FileInterceptor('photo')) // 'photo' es el nombre del campo del archivo en el formulario
+  @UseInterceptors(FileInterceptor('photo'))
   async create(
-    @UploadedFile() file: Express.Multer.File, // Aquí recibimos el archivo
+    @UploadedFile() file: Express.Multer.File,
     @Body() createDataTicketDto: CreateDataTicketDto,
   ) {
     if (file) {
-      // Si hay un archivo, lo convertimos a Buffer
-      createDataTicketDto.image = file.buffer; // Guardamos el buffer de la imagen en el DTO
+      createDataTicketDto.image = file.buffer;
     }
     return this.dataTicketsService.createTicket(createDataTicketDto);
   }
@@ -25,15 +24,15 @@ export class DataTicketsController {
   findById(@Param('userId') userId: string): Promise<CreateDataTicketDto[]> {
     return this.dataTicketsService.findById(userId);
   }
-  
+
 
   @Get('/count-by-status')
-  async countTicketsByStatus(){
+  async countTicketsByStatus() {
     return this.dataTicketsService.countTicketByStatus();
   }
 
   @Get('/count-active-ticket')
-  async countTicketsActive(){
+  async countTicketsActive() {
     return this.dataTicketsService.countTicketsActive();
   }
 
@@ -46,13 +45,6 @@ export class DataTicketsController {
   update(@Param('id') ticketId: string, @Body() updateDataTicketDto: UpdateDataTicketDto) {
     return this.dataTicketsService.updateTicketStatus(ticketId, updateDataTicketDto.status);
   }
-
-
-
-
-
-
-
 
   @Delete(':id')
   remove(@Param('id') id: string) {

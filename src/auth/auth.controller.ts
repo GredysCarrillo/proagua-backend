@@ -13,13 +13,13 @@ import { ChangePasswordDto } from './dto/chage-password.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
-//metodo que crea un usuario
+  //metodo que crea un usuario
   @Post('/createUser')
   createUser(@Body() createAuthDto: CreateUserDto) {
     return this.authService.createUser(createAuthDto);
   }
 
-//metodo para loguearse
+  //metodo para loguearse
   @Post('/login')
   login(@Body() loginDto: loginDto) {
     return this.authService.login(loginDto);
@@ -59,42 +59,48 @@ export class AuthController {
   @Put('/uploadPhoto/:id')
   @UseInterceptors(FileInterceptor('file'))
   async uploadPhoto(@Param('id') userId: string, @UploadedFile() file: Express.Multer.File,) {
-    console.log(userId, file)
     return this.authService.updateUserPhoto(userId, file);
   }
 
-   // Ruta para obtener la foto del usuario por ID
-   @Get('/photo/:userId')
-   async getUserPhoto(@Param('userId') userId: string, @Res() res: Response) {
-     const photoBuffer = await this.authService.getFotoByUserId(userId);
-     res.setHeader('Content-Type', 'image/jpeg'); 
-     return res.send(photoBuffer);
-   }
+  // Ruta para obtener la foto del usuario por ID
+  @Get('/photo/:userId')
+  async getUserPhoto(@Param('userId') userId: string, @Res() res: Response) {
+    const photoBuffer = await this.authService.getFotoByUserId(userId);
+    res.setHeader('Content-Type', 'image/jpeg');
+    return res.send(photoBuffer);
+  }
 
-   //metodo para cambiar la contraseña
-   @Patch('change-password/:id')
-    async changePassword(@Param('id') userId: string, @Body() changePasswordDto: ChangePasswordDto): Promise<void> {
-      console.log(userId, changePasswordDto.newPassword, changePasswordDto.confirmPassword, changePasswordDto.currentPassword);
-        return this.authService.changePassword(userId, changePasswordDto);
-    }
+  //metodo para cambiar la contraseña
+  @Patch('change-password/:id')
+  async changePassword(@Param('id') userId: string, @Body() changePasswordDto: ChangePasswordDto): Promise<void> {
+    return this.authService.changePassword(userId, changePasswordDto);
+  }
 
-    //metodo para eliminar un usuario
+  //metodo para eliminar un usuario
   @Delete('delete/:id')
   async deleteUser(@Param('id') userId: string) {
     await this.authService.deleteUser(userId);
-    return {message: 'Usuario y tickets eliminados correctamente'}
+    return { message: 'Usuario y tickets eliminados correctamente' }
   }
 
-   // Método para manejar la actualización del estado del usuario
-   @Patch('updateStatus/:id')
-   async updateUserStatus(
-     @Param('id') userId: string,
-     @Body('status') status: boolean,
-   ) {
-     // Llama al servicio para actualizar el estado del usuario
-     const updatedUser = await this.authService.updateUserStatus(userId, status);
-     return { message: `Usuario ${status ? 'activado' : 'suspendido'} correctamente`, user: updatedUser };
-   }
+  // Método para manejar la actualización del estado del usuario
+  @Patch('updateStatus/:id')
+  async updateUserStatus(
+    @Param('id') userId: string,
+    @Body('status') status: boolean,
+  ) {
+    const updatedUser = await this.authService.updateUserStatus(userId, status);
+    return { message: `Usuario ${status ? 'activado' : 'suspendido'} correctamente`, user: updatedUser };
+  }
+
+  @Post('recover-password')
+  async recoverPassword(
+    @Body('email') email: string,
+    @Body('dpi') dpi: string, // Cambiado aquí para extraer del cuerpo
+  ) {
+    await this.authService.recoverPassword(email, dpi);
+    return { message: 'Correo enviado con éxito' }
+  }
 }
 
 

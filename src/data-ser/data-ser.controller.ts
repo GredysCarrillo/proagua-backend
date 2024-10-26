@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { DataSerService } from './data-ser.service';
 import { UpdateDataSerDto } from './dto/update-data-ser.dto';
 import { createServiceDto } from './dto/create-service.dto';
-import { CreateDataTicketDto } from 'src/data-tickets/dto/create-data-ticket.dto';
 
 @Controller('data')
 export class DataSerController {
@@ -12,7 +11,6 @@ export class DataSerController {
   createService(@Body() createService: createServiceDto){
     return this.dataSerService.createService(createService);
   }
-
 
   @Get('servicio/:userId')
   gerServicieByUserId(@Param('userId') userId: string){
