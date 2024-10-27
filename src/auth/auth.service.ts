@@ -97,12 +97,12 @@ export class AuthService {
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: 'anner123escobar@gmail.com',
-          pass: 'wpkb kmbd jwjk xcqq',
+          user: 'gcarrillop2@miumg.edu.gt',
+          pass: 'M8j1A#42',
         },
       });
       const mailOptions = {
-        from: 'anner123escobar@gmail.com',
+        from: 'gcarrillop2@miumg.edu.gt',
         to: createUserDto.email,
         subject: 'Cuenta creada con éxito',
         text: 'Su cuenta ha sido creada con éxito. Adjunto encontrará los detalles.',
@@ -278,13 +278,13 @@ export class AuthService {
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: 'anner123escobar@gmail.com',
-          pass: 'wpkb kmbd jwjk xcqq',
+          user: 'gcarrillop2@miumg.edu.gt',
+          pass: 'M8j1A#42',
         },
       });
 
       const mailOptions = {
-        from: 'anner123escobar@gmail.com',
+        from: 'gcarrillop2@miumg.edu.gt',
         to: email,
         subject: 'Recuperación de contraseña',
         text: `Su nueva contraseña es: ${newPassword}`,
